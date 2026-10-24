@@ -1,3 +1,4 @@
+import {validateMeasurements} from './measurement-geometry.mjs';
 export const PROJECT_FORMAT='crystal-studio-project';
 const finiteVector=(v,n)=>Array.isArray(v)&&v.length===n&&v.every(x=>typeof x==='number'&&Number.isFinite(x));
 export function validateProject(value){
@@ -12,7 +13,7 @@ export function validateProject(value){
  const view={style:choice('style',['reference','element','sticks','space'],'reference'),shape:choice('shape',['sphere','ellipsoid'],'sphere'),axis:choice('axis',['x','y','z'],'y'),duration:choice('duration',[4,6,10,15,20,30,45,60],30),prob:choice('prob',[10,20,30,40,50,60,70,80,90],50),thickness:Number.isFinite(v.thickness)?Math.max(4,Math.min(18,v.thickness)):10,fogstrength:Number.isFinite(v.fogstrength)?Math.max(0,Math.min(95,v.fogstrength)):45,hydrogen:v.hydrogen!==false,labels:!!v.labels,rings:v.rings!==false,fog:v.fog!==false,transparent:!!v.transparent,background:typeof v.background==='string'&&/^#[a-f0-9]{6}$/i.test(v.background)?v.background:'#ffffff',rotation:rotation.slice(),angle:typeof v.angle==='number'&&Number.isFinite(v.angle)?v.angle%(2*Math.PI):0,zoom:typeof v.zoom==='number'&&Number.isFinite(v.zoom)?Math.max(.3,Math.min(4,v.zoom)):1,playing:v.playing!==false,resolution:choice('resolution',[1200,2400,3600],2400)};
  const selected=Array.isArray(value.selected)&&value.selected.length?value.selected:null;
  if(selected&&(!selected.every(i=>Number.isInteger(i)&&i>=0&&i<2000)||new Set(selected).size!==selected.length))throw Error('Invalid molecule selection.');
- return {format:PROJECT_FORMAT,version:1,model,view,selected};
+ return {format:PROJECT_FORMAT,version:1,model,view,selected,measurements:validateMeasurements(value.measurements,atoms)};
 }
 export function encodeProject(snapshot){return JSON.stringify(validateProject({format:PROJECT_FORMAT,version:1,...snapshot}),null,2)}
 export function decodeProject(text){if(typeof text!=='string'||text.length>20*1024*1024)throw Error('Choose a project smaller than 20 MB.');return validateProject(JSON.parse(text))}
