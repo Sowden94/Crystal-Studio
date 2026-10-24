@@ -39,7 +39,34 @@ function labelFade(world){if(!scene.fog)return 1;const depth=camera.position.z-w
 function transform(){updateFog();turn.quaternion.setFromAxisAngle(new T.Vector3(...($('axis').value==='x'?[1,0,0]:$('axis').value==='z'?[0,0,1]:[0,1,0])),angle);model.quaternion.copy(base)}
 function draw(){transform();scene.updateMatrixWorld(true);renderer.render(scene,camera);labels.forEach(({el,p})=>{el.hidden=!$('labels').checked;if(el.hidden)return;const world=p.clone().applyMatrix4(model.matrixWorld),v=world.clone().project(camera),r=$('viewport').getBoundingClientRect();el.style.opacity=labelFade(world);el.style.color=darkBackground()?'#e5eefb':'#203f63';el.style.background=darkBackground()?'#142132cc':'#ffffffb0';el.style.left=((v.x+1)/2*r.width+7)+'px';el.style.top=((-v.y+1)/2*r.height-9)+'px'});$('scrub').value=(angle*180/Math.PI)%360;$('angle').textContent=Math.round((angle*180/Math.PI)%360)+'°'}
 function animate(now){const dt=Math.min(.05,(now-last)/1000);last=now;if(!busy){if(playing)angle=(angle+dt*2*Math.PI/Number($('duration').value))%(2*Math.PI);draw()}requestAnimationFrame(animate)}
-let pointer=null;$('canvas').addEventListener('pointerdown',e=>{if(busy)return;pointer=[e.clientX,e.clientY];$('canvas').setPointerCapture(e.pointerId)});$('canvas').addEventListener('pointermove',e=>{if(!pointer||busy)return;const dx=(e.clientX-pointer[0])*.008,dy=(e.clientY-pointer[1])*.008;const q=new T.Quaternion().setFromEuler(new T.Euler(dy,dx,0));base.premultiply(q);pointer=[e.clientX,e.clientY];draw()});$('canvas').addEventListener('pointerup',()=>pointer=null);$('canvas').addEventListener('pointercancel',()=>pointer=null);$('canvas').addEventListener('wheel',e=>{e.preventDefault();if(busy)return;zoom=Math.max(.3,Math.min(4,zoom*Math.exp(-e.deltaY*.001)));resize()},{passive:false});
+let pointer=null;
+const canvas=$('canvas');
+canvas.addEventListener('pointerdown',e=>{
+  if(busy||pointer||e.button!==0)return;
+  // Keep the visible orientation, then drag in screen axes without auto-spin.
+  transform();
+  base.premultiply(turn.quaternion).normalize();
+  angle=0;
+  playing=false;
+  $('rotate').textContent='▶ Rotate';
+  pointer={id:e.pointerId,x:e.clientX,y:e.clientY};
+  canvas.setPointerCapture(e.pointerId);
+  projectIO?.markDirty();
+  draw();
+});
+canvas.addEventListener('pointermove',e=>{
+  if(!pointer||e.pointerId!==pointer.id||busy)return;
+  const dx=(e.clientX-pointer.x)*.008,dy=(e.clientY-pointer.y)*.008;
+  const q=new T.Quaternion().setFromEuler(new T.Euler(-dy,dx,0));
+  base.premultiply(q).normalize();
+  pointer.x=e.clientX;pointer.y=e.clientY;
+  draw();
+});
+const finishDrag=e=>{if(pointer&&e.pointerId===pointer.id)pointer=null};
+canvas.addEventListener('pointerup',finishDrag);
+canvas.addEventListener('pointercancel',finishDrag);
+canvas.addEventListener('lostpointercapture',finishDrag);
+canvas.addEventListener('wheel',e=>{e.preventDefault();if(busy)return;zoom=Math.max(.3,Math.min(4,zoom*Math.exp(-e.deltaY*.001)));resize()},{passive:false});
 ['style','shape','prob','thickness','hydrogen','rings'].forEach(id=>$(id).addEventListener('input',()=>{$('probvalue').textContent=$('prob').value+'%';rebuild()}));$('labels').onchange=draw;$('fog').onchange=()=>{draw();$('fogstrength').disabled=!$('fog').checked};$('fogstrength').oninput=()=>{$('fogvalue').textContent=$('fogstrength').value+'%';draw()};$('rotate').onclick=()=>{playing=!playing;$('rotate').textContent=playing?'Ⅱ Pause':'▶ Rotate';projectIO?.markDirty()};$('reset').onclick=()=>{base.setFromEuler(new T.Euler(.35,-.5,.08));angle=0;zoom=1;resize();projectIO?.markDirty()};$('scrub').oninput=()=>{playing=false;$('rotate').textContent='▶ Rotate';angle=Number($('scrub').value)*Math.PI/180;draw()};document.querySelectorAll('[data-bg]').forEach(b=>b.onclick=()=>{bg=b.dataset.bg;document.querySelectorAll('[data-bg]').forEach(x=>x.classList.toggle('active',x===b));renderer.setClearColor(bg,1);$('viewport').style.background=bg;rebuild()});
 async function importFile(file){if(!file)return;if(file.name.toLowerCase().endsWith('.pdf')){await importPdf(file);$('file').value='';return}try{if(file.size>5*1024*1024)throw Error('Please choose a file smaller than 5 MB.');const ext=file.name.split('.').pop().toLowerCase(),text=await file.text();if(ext==='cif'){const next=cifBlocks(text);if(!next.length)throw Error('No coordinate data blocks in this CIF.');const d=fromCif(next[0]);load(d);blocks=next;$('blocks').replaceChildren(...blocks.map((b,i)=>new Option(b.name,i)));$('blockwrap').hidden=blocks.length<2;}else{load(parse(text,ext));$('blockwrap').hidden=true}$('fileinfo').prepend(document.createTextNode(file.name+' · '));}catch(e){status('Could not load: '+e.message)}$('file').value=''}$('file').onchange=e=>importFile(e.target.files[0]);$('drop').ondragover=e=>{e.preventDefault();$('drop').classList.add('over')};$('drop').ondragleave=()=>$('drop').classList.remove('over');$('drop').ondrop=e=>{e.preventDefault();$('drop').classList.remove('over');importFile(e.dataTransfer.files[0])};$('blocks').onchange=()=>{try{load(fromCif(blocks[Number($('blocks').value)]))}catch(e){status(e.message)}};$('demo').onclick=()=>{$('blockwrap').hidden=true;load(sample())};$('report').onchange=async e=>{const f=e.target.files[0];if(f)await importPdf(f);$('report').value=''};
 async function save(blob,ext){if(window.crystalDesktop){const result=await window.crystalDesktop.saveExport(new Uint8Array(await blob.arrayBuffer()),(data.name.replace(/[^a-z0-9_-]/gi,'_')||'structure')+'.'+ext);return !!result}const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=(data.name.replace(/[^a-z0-9_-]/gi,'_')||'structure')+'.'+ext;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);return true}
