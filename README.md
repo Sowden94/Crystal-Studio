@@ -2,7 +2,7 @@
 
 **Crystal structure renders and looping movies, in your browser or on your desktop.**
 
-Open a crystal structure, choose the molecules you want to show, and find the right view. Crystal Studio makes clean molecular figures and full-turn animations from your coordinates, with thermal ellipsoids when a CIF includes suitable displacement data. Save a project to keep your structure, molecule selection, orientation, and display settings together.
+Open a crystal structure, choose the molecules you want to show, and find the right view. Crystal Studio makes clean molecular figures and full-turn animations from your coordinates, with thermal ellipsoids when a CIF includes suitable displacement data. Measure distances and angles, style the annotations, and choose when they appear during rotation. Save a project to keep your structure, measurements, molecule selection, orientation, and display settings together.
 
 **[Use online](https://sowden94.github.io/Crystal-Studio/)** · **[Download for Mac or Windows](https://github.com/Sowden94/Crystal-Studio/releases)** · **[User guide](docs/README.md)** · **[Report an issue](https://github.com/Sowden94/Crystal-Studio/issues/new/choose)**
 
@@ -17,6 +17,14 @@ Open a crystal structure, choose the molecules you want to show, and find the ri
 | Clean monochrome figures | Space-filling views | Ellipsoid display |
 |---|---|---|
 | ![Monochrome cubane figure exported by the app](docs/images/cubane-monochrome.png) | ![Space-filling cubane exported by the app](docs/images/cubane-space-filling.png) | ![Cubane with constructed illustrative displacement tensors](docs/images/illustrative-ellipsoids.png) |
+
+### New: distances and angles, styled your way
+
+| Custom measurement labels | Measurements that fade in near a chosen view |
+|---|---|
+| ![Illustrative cubane with a 1.560 angstrom distance and 90 degree angle, purple text and green dotted measurement lines](docs/images/measurements-styled.png) | ![Looping cubane with measurements fading in around a bookmarked viewing orientation](docs/images/measurements-rotation.gif) |
+
+Measure directly on the model, drag the labels into place, and choose your text colour, line colour, line style, and size. Keep annotations visible, hide them during automatic rotation, or fade them in only near your preferred view. **[How to use measurements](docs/guide/measurements.md)**
 
 ### Add depth to your figures
 
@@ -66,6 +74,18 @@ Use **Thermal ellipsoids** when a CIF contains valid anisotropic Uij or Bij para
 
 **Depth fading** softly fades more distant atoms and bonds toward the selected background. Its strength is adjustable and follows the structure as it rotates. The same setting is used in exported figures and movies.
 
+## Measure distances and angles
+
+Choose **Length** and drag between two atoms, or click each atom. Choose **Angle** and select three atoms; the **second atom is the vertex**. For crowded structures, use **Choose atoms by name**. Select **Rotate** to return to turning the model.
+
+- Distances are calculated from the 3D coordinates in **angstroms (Å)**; angles are in **degrees**.
+- Drag the plain-text labels to position them. **Keep labels clear of structure** is enabled by default; turn it off for unrestricted placement, or use **Auto-place labels** to reset placement.
+- Open **Measurement appearance** to choose font and line colours, text size, line thickness, and solid, dashed, dotted, or hidden measurement lines and label connectors.
+- Use **During rotation** to hide measurements during automatic rotation, always show them, or show them **Near a chosen view**. For a chosen view, pause at your preferred orientation, click **Use current view**, and choose a **30°, 60°, 90°, or 120°** visibility window. The annotations fade in and out around that orientation each turn.
+- **Include in exports** controls annotations in PNGs, GIFs, and WebM movies. Saved projects retain measurements, styling, label positions, and rotation visibility settings.
+
+Measurements use the imported coordinates and do not calculate crystallographic uncertainties. See the **[measurement guide](docs/guide/measurements.md)** for details.
+
 ## Turn a structure into a looping movie
 
 ![A full-turn animation of illustrative cubane geometry, exported by Crystal Studio](docs/images/cubane-rotation.gif)
@@ -88,7 +108,7 @@ Reports that lack coordinates cannot be reconstructed from a molecular picture o
 
 ## Save your work and come back to it
 
-**Save project** creates a `.crystalstudio` file containing the full loaded model, selected molecules, orientation, zoom, display options, background, rotation speed, and export resolution. **Open project** restores that state in either version of the app.
+**Save project** creates a `.crystalstudio` file containing the full loaded model, selected molecules, orientation, zoom, display options, background, rotation speed, export resolution, and measurement annotations. **Open project** restores that state in either version of the app.
 
 | Online | Desktop |
 |---|---|

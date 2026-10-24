@@ -17,3 +17,10 @@ These images and looping animations were exported by Crystal Studio using illust
 Each GIF repeats indefinitely. The new GIFs use 80 frames over four seconds; slower rotations are also available in the app.
 
 The temporary example-loading controls used during media capture are not part of the shipped application. Images and animations themselves use the application renderer and export controls.
+
+## Measurement examples
+
+- `measurements-styled.png`: built-in synthetic cubane with distance and angle annotations, purple Arial text, green dotted measurement lines, and solid label connectors.
+- `measurements-rotation.gif`: the same constructed geometry with measurements fading in near a bookmarked orientation; a four-second full turn with 80 frames and infinite repeat.
+
+These are app exports from synthetic demonstration coordinates, not user research or experimental measurements.

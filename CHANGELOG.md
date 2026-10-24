@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — measurement update
+
+- Interactive 3D distance and angle measurements, with atom-name selection.
+- Draggable plain-text labels and automatic placement clear of the structure.
+- Configurable text and line colours, line styles, text size, and line thickness.
+- Hide measurements during automatic rotation, always show them, or fade them in near a bookmarked view.
+- Measurement annotations in PNG, GIF, and WebM exports and saved projects.
+- Manual rotation follows pointer direction and pauses automatic rotation.
+
 ## 0.1.0-beta.1 — initial beta preparation
 
 - Online static app prepared for GitHub Pages.
