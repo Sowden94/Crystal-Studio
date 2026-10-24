@@ -1,0 +1,297 @@
+{
+  "format": "crystal-studio-project",
+  "version": 1,
+  "model": {
+    "name": "Sample · cubane",
+    "source": "DEMO",
+    "warning": "Illustrative geometry · not experimental diffraction data",
+    "atoms": [
+      {
+        "element": "C",
+        "label": "C1",
+        "p": [
+          -0.78,
+          -0.78,
+          -0.78
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "C",
+        "label": "C2",
+        "p": [
+          -0.78,
+          -0.78,
+          0.78
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "C",
+        "label": "C3",
+        "p": [
+          -0.78,
+          0.78,
+          -0.78
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "C",
+        "label": "C4",
+        "p": [
+          -0.78,
+          0.78,
+          0.78
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "C",
+        "label": "C5",
+        "p": [
+          0.78,
+          -0.78,
+          -0.78
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "C",
+        "label": "C6",
+        "p": [
+          0.78,
+          -0.78,
+          0.78
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "C",
+        "label": "C7",
+        "p": [
+          0.78,
+          0.78,
+          -0.78
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "C",
+        "label": "C8",
+        "p": [
+          0.78,
+          0.78,
+          0.78
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "H",
+        "label": "H1",
+        "p": [
+          -1.4040000000000001,
+          -1.4040000000000001,
+          -1.4040000000000001
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "H",
+        "label": "H2",
+        "p": [
+          -1.4040000000000001,
+          -1.4040000000000001,
+          1.4040000000000001
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "H",
+        "label": "H3",
+        "p": [
+          -1.4040000000000001,
+          1.4040000000000001,
+          -1.4040000000000001
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "H",
+        "label": "H4",
+        "p": [
+          -1.4040000000000001,
+          1.4040000000000001,
+          1.4040000000000001
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "H",
+        "label": "H5",
+        "p": [
+          1.4040000000000001,
+          -1.4040000000000001,
+          -1.4040000000000001
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "H",
+        "label": "H6",
+        "p": [
+          1.4040000000000001,
+          -1.4040000000000001,
+          1.4040000000000001
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "H",
+        "label": "H7",
+        "p": [
+          1.4040000000000001,
+          1.4040000000000001,
+          -1.4040000000000001
+        ],
+        "U": null,
+        "occupancy": 1
+      },
+      {
+        "element": "H",
+        "label": "H8",
+        "p": [
+          1.4040000000000001,
+          1.4040000000000001,
+          1.4040000000000001
+        ],
+        "U": null,
+        "occupancy": 1
+      }
+    ],
+    "bonds": [
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        10,
+        2
+      ],
+      [
+        11,
+        3
+      ],
+      [
+        12,
+        4
+      ],
+      [
+        13,
+        5
+      ],
+      [
+        14,
+        6
+      ],
+      [
+        15,
+        7
+      ]
+    ]
+  },
+  "view": {
+    "style": "reference",
+    "shape": "sphere",
+    "axis": "y",
+    "duration": 30,
+    "prob": 50,
+    "thickness": 10,
+    "fogstrength": 45,
+    "hydrogen": true,
+    "labels": false,
+    "rings": true,
+    "fog": true,
+    "transparent": false,
+    "background": "#ffffff",
+    "rotation": [
+      0.15,
+      -0.23,
+      0.03,
+      0.96
+    ],
+    "angle": 0,
+    "zoom": 1,
+    "playing": false,
+    "resolution": 2400
+  },
+  "selected": [
+    0
+  ]
+}
