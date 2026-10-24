@@ -57,7 +57,7 @@ canvas.addEventListener('pointerdown',e=>{
 canvas.addEventListener('pointermove',e=>{
   if(!pointer||e.pointerId!==pointer.id||busy)return;
   const dx=(e.clientX-pointer.x)*.008,dy=(e.clientY-pointer.y)*.008;
-  const q=new T.Quaternion().setFromEuler(new T.Euler(-dy,dx,0));
+  const q=new T.Quaternion().setFromEuler(new T.Euler(dy,dx,0));
   base.premultiply(q).normalize();
   pointer.x=e.clientX;pointer.y=e.clientY;
   draw();
