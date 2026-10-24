@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: 'If you use Crystal Studio in research, please cite the software and retain a record of the version used.'
+title: 'Crystal Studio'
+type: software
+version: 0.1.0-beta.1
+authors:
+  - family-names: Sowden
+    given-names: M. J.
+license: GPL-3.0-only
+repository-code: 'https://github.com/Sowden94/Crystal-Studio'
+abstract: 'A beta application for crystal structure rendering, molecule selection, project saving, and looping molecular rotation exports.'
