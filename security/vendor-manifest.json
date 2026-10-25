@@ -1,0 +1,32 @@
+[
+  {
+    "package": "three",
+    "version": "0.169.0",
+    "file": "web/vendor/three.js",
+    "sha256": "0a3368c165eea773490aec7b77c22de70e3eac288503409256fdbf4d12578416"
+  },
+  {
+    "package": "gifenc",
+    "version": "1.0.3",
+    "file": "web/vendor/gifenc.js",
+    "sha256": "217761244379253ba5815510d3048a4fb1f4c4dbe9fb51a5cfbfe26f34eec093"
+  },
+  {
+    "package": "pdfjs-dist",
+    "version": "6.4.299",
+    "file": "web/vendor/pdf.mjs",
+    "sha256": "bc51f4874a66e3853189cb5d50aba4b3096afa83ed433b885d293a3d94583cdc"
+  },
+  {
+    "package": "pdfjs-dist",
+    "version": "6.4.299",
+    "file": "web/vendor/pdf.worker.mjs",
+    "sha256": "bb422f60804477de4a0b09091d8347a916a387755ed1cbad24ccaec1d09c78bf"
+  },
+  {
+    "package": "core-js",
+    "version": "3.50.0",
+    "file": "web/vendor/pdf.mjs",
+    "sha256": "bc51f4874a66e3853189cb5d50aba4b3096afa83ed433b885d293a3d94583cdc"
+  }
+]

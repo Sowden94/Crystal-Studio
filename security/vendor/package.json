@@ -1,0 +1,12 @@
+{
+  "name": "crystal-studio-vendor-audit",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Audit inventory for bundled browser libraries; not application runtime dependencies.",
+  "dependencies": {
+    "core-js": "3.50.0",
+    "gifenc": "1.0.3",
+    "pdfjs-dist": "6.4.299",
+    "three": "0.169.0"
+  }
+}

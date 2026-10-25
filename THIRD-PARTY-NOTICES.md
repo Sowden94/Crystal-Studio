@@ -6,7 +6,8 @@ Crystal Studio's original application code is copyright © 2026 M. J. Sowden, li
 |---|---|---|---|
 | Three.js | 0.169.0 | MIT | `third-party-licenses/three-MIT.txt` and module header |
 | gifenc | 1.0.3 | MIT | `third-party-licenses/gifenc-MIT.txt` |
-| PDF.js / pdfjs-dist | 4.10.38 | Apache-2.0 | `third-party-licenses/pdfjs-Apache-2.0.txt` and module headers |
+| PDF.js / pdfjs-dist | 6.4.299 | Apache-2.0 | `third-party-licenses/pdfjs-Apache-2.0.txt` and module headers |
+| core-js (PDF.js compatibility polyfills) | 3.50.0 | MIT | `third-party-licenses/core-js-MIT.txt` and embedded notices |
 | Electron | 45.0.0 | MIT plus bundled third-party licences | `LICENSE.electron.txt` and `LICENSES.chromium.html` included by the desktop packager |
 | electron-builder (build tool) | 26.15.3 | MIT | Distributed through npm; see the dependency's own licence |
 

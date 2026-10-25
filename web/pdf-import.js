@@ -1,11 +1,34 @@
-import {analyseReport,buildReportModel} from './report.mjs';
+import {PDF_LIMITS} from './import-limits.mjs';
+import {startImport} from './import-runner.mjs';
+import {validatedModel} from './import-model.mjs';
 export function setupPdfImport({load,status}){
-const $=id=>document.getElementById(id);let candidate=null,reportName='',task=null,run=0;
-function showTable(){if(!candidate)return;const t=candidate.tables[Number($('pdftable').value)];$('pdfrows').value=t?t.rows.map(r=>r.raw).join('\n'):'';$('pdfkind').value=t?.kind||'';$('pdfscale').value=t?.scale||'';$('pdfcontext').textContent=t?`Detected ${t.rows.length} atom rows on page ${t.page}. Verify that this is the complete table for your compound.`:'No coordinate table detected. This report may contain only refinement statistics or images. You can paste a coordinate table below, or upload a CIF.';$('pdfcellgroup').hidden=$('pdfkind').value==='cartesian';$('pdfmessage').textContent=''}
-$('pdfkind').onchange=()=>$('pdfcellgroup').hidden=$('pdfkind').value==='cartesian';$('pdftable').onchange=showTable;
-$('pdfclose').onclick=()=>{run++;task?.destroy();task=null;$('pdfreview').close()};
-$('pdfcancel').onclick=()=>$('pdfreview').close();
-$('pdfreview').addEventListener('cancel',()=>{run++;task?.destroy();task=null});
-$('pdfrender').onclick=()=>{try{const d=buildReportModel({text:$('pdfrows').value,kind:$('pdfkind').value,scale:$('pdfscale').value,cell:['a','b','c','alpha','beta','gamma'].map(k=>$('pdfcell_'+k).value),name:reportName.replace(/\.pdf$/i,'')});load(d);$('blockwrap').hidden=true;$('pdfreview').close();status('PDF coordinates loaded. Review inferred bonds against your report.')}catch(e){$('pdfmessage').textContent=e.message}};
-return async function importPdf(file){const token=++run;candidate=null;reportName=file.name;$('pdfreview').showModal();$('pdfname').textContent=file.name;$('pdfprogress').textContent='Reading PDF…';$('pdfcontents').hidden=true;$('pdfrender').disabled=true;$('pdfmessage').textContent='';try{if(file.size>30*1024*1024)throw Error('Choose a PDF smaller than 30 MB.');const pdfjs=await import('./vendor/pdf.mjs');pdfjs.GlobalWorkerOptions.workerSrc=new URL('./vendor/pdf.worker.mjs',import.meta.url).href;task=pdfjs.getDocument({data:new Uint8Array(await file.arrayBuffer()),isEvalSupported:false,useSystemFonts:true});task.onPassword=()=>{task.destroy();$('pdfprogress').textContent='Password-protected PDF. Upload an unlocked copy.'};const doc=await task.promise;if(doc.numPages>150)throw Error('Please upload a report of 150 pages or fewer.');const pages=[];for(let i=1;i<=doc.numPages;i++){if(run!==token)return;$('pdfprogress').textContent=`Reading page ${i} of ${doc.numPages}…`;const page=await doc.getPage(i),content=await page.getTextContent(),groups=[];for(const item of content.items){if(!item.str?.trim())continue;const y=item.transform[5],x=item.transform[4],tol=Math.max(2,Math.abs(item.transform[3])*.3);let row=groups.find(r=>Math.abs(r.y-y)<tol);if(!row){row={y,items:[]};groups.push(row)}row.items.push({x,s:item.str})}const lines=groups.sort((a,b)=>b.y-a.y).map(r=>r.items.sort((a,b)=>a.x-b.x).map(i=>i.s).join(' ').replace(/\s+/g,' ').trim());pages.push({page:i,lines});page.cleanup()}if(run!==token)return;candidate=analyseReport(pages);$('pdftext').value=candidate.text;$('pdftable').replaceChildren(...candidate.tables.map((t,i)=>new Option(`${t.title} · ${t.rows.length} atoms`,i)));$('pdftablewrap').hidden=!candidate.tables.length;candidate.cell.forEach((v,i)=>{$('pdfcell_'+['a','b','c','alpha','beta','gamma'][i]).value=v});$('pdfcontents').hidden=false;$('pdfrender').disabled=false;const letters=candidate.text.replace(/--- Page \d+ ---/g,'').trim().length;$('pdfprogress').textContent=letters<50?'This looks like a scanned PDF. Automatic extraction needs selectable text; use OCR on the PDF, then import it again.':`${doc.numPages} pages read · ${candidate.tables.length} coordinate table(s) detected`;showTable();if(!candidate.tables.length&&letters<50)$('pdfcontext').textContent='No readable coordinate text was found. OCR is not built in. You can paste verified coordinates below or upload the CIF.';status('PDF read. Review the extracted coordinates before rendering.');await doc.destroy();task=null;}catch(e){if(run===token){$('pdfprogress').textContent='Could not extract this PDF: '+e.message;status('PDF extraction failed. Your current model has been kept.')}task?.destroy();task=null;}}
+  const $=id=>document.getElementById(id);let candidate=null,reportName='',task=null,run=0;
+  function cancel(){run++;task?.cancel();task=null;}
+  function showTable(){if(!candidate)return;const t=candidate.tables[Number($('pdftable').value)];$('pdfrows').value=t?t.rows.map(r=>r.raw).join('\n'):'';$('pdfkind').value=t?.kind||'';$('pdfscale').value=t?.scale||'';$('pdfcontext').textContent=t?'Detected '+t.rows.length+' atom rows on page '+t.page+'. Verify that this is the complete table for your compound.':'No coordinate table detected. You can paste a coordinate table below, or upload a CIF.';$('pdfcellgroup').hidden=$('pdfkind').value==='cartesian';$('pdfmessage').textContent='';}
+  $('pdfkind').onchange=()=>$('pdfcellgroup').hidden=$('pdfkind').value==='cartesian';$('pdftable').onchange=showTable;
+  $('pdfclose').onclick=()=>{cancel();$('pdfreview').close()};$('pdfcancel').onclick=()=>{cancel();$('pdfreview').close()};$('pdfreview').addEventListener('cancel',cancel);
+  $('pdfrender').onclick=async()=>{
+    const token=++run;task?.cancel();$('pdfrender').disabled=true;
+    const current=startImport('report-model',{text:$('pdfrows').value,kind:$('pdfkind').value,scale:$('pdfscale').value,cell:['a','b','c','alpha','beta','gamma'].map(k=>$('pdfcell_'+k).value),name:reportName.replace(/\.pdf$/i,'')});task=current;
+    try{const result=await current.promise;if(run!==token)return;load(validatedModel(result.model));$('blockwrap').hidden=true;$('pdfreview').close();status('PDF coordinates loaded. Review inferred bonds against your report.');}
+    catch(e){if(run===token&&e.name!=='AbortError')$('pdfmessage').textContent=e.message;}
+    finally{if(task===current)task=null;if(run===token)$('pdfrender').disabled=false;}
+  };
+  const importPdf=async function(file){
+    cancel();const token=run;candidate=null;reportName=file.name;if(!$('pdfreview').open)$('pdfreview').showModal();$('pdfname').textContent=file.name;$('pdfprogress').textContent='Reading PDF in an isolated worker…';$('pdfcontents').hidden=true;$('pdfrender').disabled=true;$('pdfmessage').textContent='';
+    let current;
+    try{
+      if(file.size>PDF_LIMITS.bytes)throw Error('Choose a PDF smaller than 30 MB.');
+      const bytes=await file.arrayBuffer();if(run!==token)return;
+      current=startImport('pdf',{bytes},{transfer:[bytes],milliseconds:PDF_LIMITS.milliseconds,onProgress:p=>{if(run===token)$('pdfprogress').textContent='Reading page '+p.page+' of '+p.pages+'…';}});task=current;
+      const result=await current.promise;if(run!==token)return;
+      if(typeof result.text!=='string'||result.text.length>PDF_LIMITS.characters+10000||!Array.isArray(result.tables)||result.tables.length>1000)throw Error('Invalid report reader response.');
+      candidate=result;$('pdftext').value=candidate.text;$('pdftable').replaceChildren(...candidate.tables.map((t,i)=>new Option(t.title+' · '+t.rows.length+' atoms',i)));$('pdftablewrap').hidden=!candidate.tables.length;candidate.cell.forEach((v,i)=>{$('pdfcell_'+['a','b','c','alpha','beta','gamma'][i]).value=v});$('pdfcontents').hidden=false;$('pdfrender').disabled=false;
+      const letters=candidate.text.replace(/--- Page \d+ ---/g,'').trim().length;
+      $('pdfprogress').textContent=letters<50?'This looks like a scanned PDF. Use OCR first, then import it again.':candidate.pageCount+' pages read · '+candidate.tables.length+' coordinate table(s) detected';showTable();status('PDF read. Review the extracted coordinates before rendering.');
+    }catch(e){if(run===token&&e.name!=='AbortError'){$('pdfprogress').textContent='Could not extract this PDF: '+e.message;status('PDF extraction failed. Your current model has been kept.');}}
+    finally{if(task===current)task=null;}
+  };
+  importPdf.cancel=cancel;return importPdf;
 }
+

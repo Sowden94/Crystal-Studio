@@ -1,6 +1,6 @@
 {
   "name": "crystal-studio",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.2",
   "description": "Crystal structure renders and looping movies, online and on your desktop.",
   "author": "M. J. Sowden",
   "license": "GPL-3.0-only",
@@ -18,7 +18,10 @@
     "desktop:mac": "electron-builder --mac dmg zip --publish never",
     "desktop:windows": "electron-builder --win nsis zip --x64 --publish never",
     "desktop:linux": "electron-builder --linux dir --publish never",
-    "package:preview": "electron-builder --dir --publish never"
+    "package:preview": "electron-builder --dir --publish never",
+    "security:check": "node scripts/check-security.mjs",
+    "security:audit": "node scripts/audit-security.mjs",
+    "security:fuzz": "node scripts/fuzz-imports.mjs"
   },
   "devDependencies": {
     "electron": "45.0.0",
@@ -27,7 +30,7 @@
   "build": {
     "appId": "org.sowden.crystalstudio",
     "productName": "Crystal Studio",
-    "copyright": "Copyright © 2026 M. J. Sowden",
+    "copyright": "Copyright \u00a9 2026 M. J. Sowden",
     "directories": {
       "output": "release",
       "buildResources": "build"
@@ -86,6 +89,14 @@
         "role": "Editor"
       }
     ],
-    "publish": null
+    "publish": null,
+    "electronFuses": {
+      "runAsNode": false,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "onlyLoadAppFromAsar": true,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "grantFileProtocolExtraPrivileges": false
+    }
   }
 }
