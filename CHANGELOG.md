@@ -1,5 +1,10 @@
 # Changelog
 
+## Windows checkout correction — 25 October 2026
+
+- Preserve audited vendor bytes across Windows/Mac/Linux checkout with `.gitattributes`.
+- Keep the exact SHA-256 checks enabled and add a checkout regression test.
+
 ## 0.1.0-beta.2 — additional security hardening
 
 - Updated bundled PDF.js from 4.10.38 to 6.4.299.

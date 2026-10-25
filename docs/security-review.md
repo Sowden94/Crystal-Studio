@@ -28,7 +28,7 @@ Worker threads reduce access to the page and preload bridge and allow terminatio
 
 ## Verification and limits
 
-- **35 automated tests passed**, covering worker completion/timeout/cancellation/failure, unavailable workers failing closed, hostile URLs, native file signatures and size limits, IPC wiring with a mocked Electron API, geometry, project persistence and synthetic PDF extraction.
+- **36 automated tests passed**, covering worker completion/timeout/cancellation/failure, unavailable workers failing closed, hostile URLs, native file signatures and size limits, IPC wiring with a mocked Electron API, geometry, project persistence and synthetic PDF extraction.
 - **3,000 deterministic malformed synthetic CIF/XYZ/MOL cases completed** within the 30-second fuzz-run limit: 191 accepted and revalidated; 2,809 rejected. This mutation smoke test is not exhaustive fuzzing, does not fuzz the JavaScript engine, and does not provide broad PDF exploit coverage.
 - Both npm dependency audit inventories reported **zero known vulnerabilities** at review time. This means no matching published advisory was reported, not that the code has no vulnerabilities.
 - Syntax checks, static build and Linux desktop packaging passed. Packaged Linux binary fuse bytes were read back: RunAsNode, NODE_OPTIONS, CLI inspection and extra file privileges disabled; ASAR-only loading and integrity fuse enabled. Linux does not provide the same ASAR integrity enforcement as supported Mac/Windows builds.
@@ -49,3 +49,7 @@ npm run security:audit
 The Security checks workflow runs on pushes and pull requests and supports manual dispatch. Dependabot checks the root npm lock, bundled-library audit lock and pinned GitHub Actions. Maintainers must update vendored files and their hashes together; a dependency inventory change alone does not replace bundled code.
 
 Apply all package files together, then rebuild desktop downloads from the new main commit. Existing installed copies do not acquire these changes automatically. Keep this version under beta review until the outstanding platform and browser checks are completed.
+
+## Windows checkout follow-up — 25 October 2026
+
+The first Windows desktop build stopped at the bundled Three.js hash check. Git line-ending conversion was reproduced locally; the file content changes from LF to CRLF during Windows-style checkout. The new root `.gitattributes` keeps vendor files as exact bytes. A regression test reproduces the mismatch without the rule and verifies exact bytes with it; real content changes still produce a different hash. Both Mac packaging jobs had passed. A new Windows GitHub build is required to verify the complete corrected pipeline.
