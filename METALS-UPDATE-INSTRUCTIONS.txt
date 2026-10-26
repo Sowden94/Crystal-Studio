@@ -16,3 +16,5 @@ Coverage: all 118 element identities/radii and metal display colours; CIF report
 Automatic bonds are distance estimates, not assignments of bond order, oxidation state, spin, or hapticity. Check unusual coordination and incomplete CIF bond tables against the refinement.
 
 Validation: 44 automated tests pass, JavaScript/assets/vendor checks pass, web build passes. A synthetic nickel example was inspected in the browser. Cross-platform installed desktop runtime testing remains outstanding.
+
+Element colours are now the default on startup. Classic monochrome remains available, and saved projects retain their chosen style.

@@ -2,6 +2,8 @@
 
 ## 0.1.0-beta.3 — elements and metals
 
+- Element colours are the default render style; saved projects retain their chosen style.
+
 - Complete 118-element identities, covalent-radius data and display colours.
 - Read charged CIF type symbols without losing metal identity.
 - Retain reported bonds for Cartesian CIFs and support their finite symmetry completion when a complete unit cell is supplied.
