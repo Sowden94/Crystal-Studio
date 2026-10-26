@@ -68,6 +68,10 @@ Some crystal structures contain several independent molecules, solvent, or count
 
 **[Try two cubanes and water](examples/two-cubanes-and-water.xyz)**
 
+## Organic and inorganic structures
+
+All 118 current element symbols are recognised, including transition metals, lanthanides and actinides. CIF and MOL/SDF connections take priority over distance guesses. CIFs with Cartesian coordinates retain reported metal–ligand bonds. For extended structures, turn **Complete finite molecules** off to display deposited sites; boundary connections are omitted. Distance-based bonding remains approximate—review coordination and contacts against the source report. See the [elements and metals guide](docs/guide/elements-and-metals.md).
+
 ## Thermal ellipsoids and depth fading
 
 Use **Thermal ellipsoids** when a CIF contains valid anisotropic Uij or Bij parameters. Choose the ellipsoid probability, adjust bond thickness, and show or hide the ellipsoid outlines. Atoms without usable anisotropic data remain spheres.

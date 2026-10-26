@@ -4,7 +4,7 @@ import {analyseReport,buildReportModel} from './report.mjs';
 import {PDF_LIMITS,pdfOptions,checkPdfPage} from './import-limits.mjs';
 import {createIsolatedWorker} from './isolated-worker.mjs';
 
-export function parseStructure({text,ext,index=0}) {
+export function parseStructure({text,ext,index=0,expandSymmetry=true}) {
   if(typeof text!=='string'||text.length>5*1024*1024)throw Error('Choose a structure smaller than 5 MB.');
   if(!['cif','xyz','mol','sdf'].includes(ext))throw Error('Choose CIF, XYZ, MOL or SDF coordinates.');
   if(ext!=='cif')return {model:validatedModel(parse(text,ext)),blockNames:[]};
@@ -12,7 +12,7 @@ export function parseStructure({text,ext,index=0}) {
   if(!blocks.length)throw Error('No coordinate data blocks in this CIF.');
   if(blocks.length>64)throw Error('Choose a CIF with 64 or fewer coordinate blocks.');
   if(!Number.isInteger(index)||index<0||index>=blocks.length)throw Error('Invalid CIF block selection.');
-  return {model:validatedModel(fromCif(blocks[index])),blockNames:blocks.map(b=>String(b.name).slice(0,256))};
+  return {model:validatedModel(fromCif(blocks[index],{expandSymmetry:expandSymmetry!==false})),blockNames:blocks.map(b=>String(b.name).slice(0,256))};
 }
 export async function extractPdf(bytes,progress=()=>{}) {
   if(!(bytes instanceof ArrayBuffer)||bytes.byteLength>PDF_LIMITS.bytes||bytes.byteLength<8)throw Error('Choose a valid PDF smaller than 30 MB.');

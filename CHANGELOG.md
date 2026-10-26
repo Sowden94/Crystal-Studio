@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-beta.3 — elements and metals
+
+- Complete 118-element identities, covalent-radius data and display colours.
+- Read charged CIF type symbols without losing metal identity.
+- Retain reported bonds for Cartesian CIFs and support their finite symmetry completion when a complete unit cell is supplied.
+- Deposited-sites option for extended structures, with omitted boundary connections identified.
+- Preserve reported heavy-atom connectivity and avoid guessing extra short metal contacts when it is supplied.
+- Added synthetic inorganic and full-periodic-table import regression checks.
+
 ## Windows checkout correction — 25 October 2026
 
 - Preserve audited vendor bytes across Windows/Mac/Linux checkout with `.gitattributes`.

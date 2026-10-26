@@ -1,10 +1,11 @@
+import {elementSymbol} from './elements.mjs';
 import {validateMeasurements} from './measurement-geometry.mjs';
 export const PROJECT_FORMAT='crystal-studio-project';
 const finiteVector=(v,n)=>Array.isArray(v)&&v.length===n&&v.every(x=>typeof x==='number'&&Number.isFinite(x));
 export function validateProject(value){
  if(!value||value.format!==PROJECT_FORMAT||value.version!==1)throw Error('This is not a supported Crystal Studio project.');
  const m=value.model;if(!m||!Array.isArray(m.atoms)||m.atoms.length<1||m.atoms.length>2000)throw Error('Project must contain 1–2,000 atoms.');
- const atoms=m.atoms.map((a,i)=>{if(!a||!/^[A-Z][a-z]?$/.test(a.element)||!finiteVector(a.p,3)||a.p.some(v=>Math.abs(v)>1e6))throw Error('Invalid atom '+(i+1));if(a.U!==null&&a.U!==undefined&&(!Array.isArray(a.U)||a.U.length!==3||!a.U.every(r=>finiteVector(r,3))))throw Error('Invalid displacement tensor.');return {element:a.element,label:String(a.label||a.element+(i+1)).slice(0,256),p:a.p.slice(),U:a.U?a.U.map(r=>r.slice()):null,occupancy:typeof a.occupancy==='number'&&Number.isFinite(a.occupancy)?a.occupancy:1}});
+ const atoms=m.atoms.map((a,i)=>{if(!a||!/^[A-Z][a-z]?$/.test(a.element)||!finiteVector(a.p,3)||a.p.some(v=>Math.abs(v)>1e6))throw Error('Invalid atom '+(i+1));if(a.U!==null&&a.U!==undefined&&(!Array.isArray(a.U)||a.U.length!==3||!a.U.every(r=>finiteVector(r,3))))throw Error('Invalid displacement tensor.');return {element:elementSymbol(a.element),label:String(a.label||a.element+(i+1)).slice(0,256),p:a.p.slice(),U:a.U?a.U.map(r=>r.slice()):null,occupancy:typeof a.occupancy==='number'&&Number.isFinite(a.occupancy)?a.occupancy:1}});
  if(!Array.isArray(m.bonds)||m.bonds.length>20000)throw Error('Project has invalid connectivity.');const bonds=m.bonds.map(b=>{if(!Array.isArray(b)||b.length!==2||!b.every(i=>Number.isInteger(i)&&i>=0&&i<atoms.length)||b[0]===b[1])throw Error('Project has an invalid bond.');return b.slice()});
  const source=String(m.source||'PROJECT').slice(0,32),model={name:String(m.name||'Untitled').slice(0,256),source,warning:String(m.warning||'Saved project · verify connectivity against the original structure').slice(0,1000),atoms,bonds};
  for(const k of ['symmetryAdded','asymmetricAtoms'])if(Number.isInteger(m[k])&&m[k]>=0)model[k]=m[k];

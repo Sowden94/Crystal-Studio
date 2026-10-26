@@ -1,0 +1,18 @@
+Crystal Studio beta 3 — elements and metals update
+
+Review the private demo before updating GitHub.
+
+1. Download and extract this ZIP.
+2. Open the Crystal-Studio repository, select Add file > Upload files.
+3. Upload the extracted web, tests and docs folders plus package.json, package-lock.json, README.md and CHANGELOG.md to the repository root. Keep their folder structure. Do not upload this ZIP itself.
+4. Commit the update. Let the existing checks and Pages deployment finish.
+5. Hard-refresh the website, choose Load metal sample, and confirm the synthetic nickel example has 25 atoms and 24 bonds. Check Ni–N measurements at 2.100 angstroms.
+6. For new desktop downloads, run the existing desktop release workflow after the checks pass. Existing installed copies do not update just from a Pages deployment.
+
+This package contains app code and documentation, plus constructed test examples. It contains no experimental research structures or reports.
+
+Coverage: all 118 element identities/radii and metal display colours; CIF reported geometry is preferred; symmetry completion supports finite complexes. Turn off Complete finite molecules for deposited sites in extended networks. This view omits boundary connections and is not a full crystal-packing view.
+
+Automatic bonds are distance estimates, not assignments of bond order, oxidation state, spin, or hapticity. Check unusual coordination and incomplete CIF bond tables against the refinement.
+
+Validation: 44 automated tests pass, JavaScript/assets/vendor checks pass, web build passes. A synthetic nickel example was inspected in the browser. Cross-platform installed desktop runtime testing remains outstanding.

@@ -10,4 +10,6 @@ Crystal Studio is beta software under active development. Save projects often an
 6. **[Known limitations](guide/limitations.md)** — what is currently supported.
 7. **[Examples](../examples/README.md)** — safe illustrative files to explore the app.
 
+For metal-containing structures and connectivity limits, see [elements and metals](guide/elements-and-metals.md).
+
 For development and release setup, see [developer notes](developers.md) and [maintainer setup](maintainer-setup.md).
