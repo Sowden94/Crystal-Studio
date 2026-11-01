@@ -24,7 +24,7 @@
     "security:fuzz": "node scripts/fuzz-imports.mjs"
   },
   "devDependencies": {
-    "electron": "45.0.0",
+    "electron": "45.1.0",
     "electron-builder": "26.15.3"
   },
   "build": {
