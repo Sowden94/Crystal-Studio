@@ -1,0 +1,16 @@
+Crystal Studio — GIF and movie export fix
+
+Fixes cropping on Retina/high-resolution displays by scaling the entire backing canvas into the export. GIF and WebM movies automatically fit the whole visible molecule throughout a full 360-degree rotation, independent of workspace zoom. This includes space-filling and thermal-ellipsoid sizes. PNG export keeps your chosen workspace zoom, with corrected high-resolution scaling.
+
+INSTALL ON GITHUB
+1. Extract this ZIP.
+2. Open https://github.com/Sowden94/Crystal-Studio and select Code > Add file > Upload files.
+3. Drag the extracted web, tests and docs folders into the upload area at the repository root. Keep the folders and their contents together. Do not upload this ZIP itself or the enclosing extraction folder.
+4. Commit with the message: Fix GIF and movie export cropping.
+5. Wait for the existing checks and Pages deployment in Actions to finish successfully.
+6. Open the online app and hard-refresh (Mac: Command-Shift-R; Windows: Control-Shift-R).
+7. Load a built-in sample, choose 4 seconds per turn, zoom in, and export a GIF. The exported animation should show the complete sample throughout its turn. Then try your own file locally in your browser.
+
+This patch only contains the four listed code/test/documentation files. It contains no research files, screenshots or experimental structures.
+
+Desktop users need a new build through the existing desktop workflow to receive the same fix. Existing installed versions do not change when the website updates.
