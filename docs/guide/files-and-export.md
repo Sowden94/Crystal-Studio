@@ -26,3 +26,5 @@ Rotation can take 4, 6, 10, 15, 20, 30, 45, or 60 seconds per turn. Longer times
 **GIF** exports a complete turn with infinite repeat. Long rotations use up to 360 frames with longer frame intervals to keep encoding and file size manageable. **WebM** records at 30 fps where supported by the browser; set repeat in the video player. Native save dialogs are used for desktop exports.
 
 The structure rotates as a static model. The animation does not simulate atomic motion or chemical dynamics. Atom labels and enabled measurement annotations are included in PNG, GIF, and WebM output. **Include in exports** controls measurement annotations; **During rotation** controls their appearance in movies.
+
+GIF and WebM exports automatically fit the entire visible structure throughout a full turn, including space-filling spheres and thermal ellipsoids. Workspace zoom does not crop the exported movie. PNG images retain the current workspace zoom. Full backing-canvas scaling is used on Retina and other high-resolution displays.
